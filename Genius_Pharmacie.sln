@@ -1,0 +1,18 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+# SharpDevelop 4.4
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Genius_Pharmacie", "Genius_Pharmacie.csproj", "{76F1B6A0-1305-4D5A-8361-01AA6D55F7D1}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{76F1B6A0-1305-4D5A-8361-01AA6D55F7D1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{76F1B6A0-1305-4D5A-8361-01AA6D55F7D1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{76F1B6A0-1305-4D5A-8361-01AA6D55F7D1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{76F1B6A0-1305-4D5A-8361-01AA6D55F7D1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+	EndGlobalSection
+EndGlobal
