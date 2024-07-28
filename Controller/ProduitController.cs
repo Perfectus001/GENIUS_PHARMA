@@ -27,7 +27,7 @@ namespace Genius_Pharmacie.Controller
 		
 		public void MenuProduit()
 		{
-			Console.Title = "MANIPULATION DE MATRICE";
+			Console.Title = "GESTION PRODUIT";
 			bool while1 = true;
 			string choix = null;
 			while(while1){
@@ -43,7 +43,7 @@ namespace Genius_Pharmacie.Controller
 					Console.WriteLine("c. Modifier le prix unitaire et/ou de vente d’un produit par son Code\n");
 					Console.WriteLine("d. Affichage de la liste des produits en ordre croissant\n");
 					Console.WriteLine("e. Affichage de la liste des produits en ordre décroissant");
-					Console.WriteLine("f. Quitter Menu matrice");
+					Console.WriteLine("f. Menu principal");
 					Console.Write("========================================================\n>>");				
 					choix = Console.ReadLine();
 					if(Regex.IsMatch(choix, @"^[a-fA-F]$")){
@@ -254,7 +254,7 @@ namespace Genius_Pharmacie.Controller
 			return 1;
 		}
 		
-				//Fonction permettant de generer le code du produit 
+		//Fonction permettant de generer le code du produit 
 		private string generateCode(string nom, string categorie){
         	// Obtenir la première lettre de la catégorie et du nom
 	        char premiereLettreCategorie = categorie[0];

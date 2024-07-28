@@ -50,7 +50,8 @@ namespace Genius_Pharmacie
 						
 						break;
 					case "2":
-						
+						ClientController clientController = new ClientController();
+						clientController.MenuClient();
 						break;
 					case "3":
 						ProduitController produitController = new ProduitController();

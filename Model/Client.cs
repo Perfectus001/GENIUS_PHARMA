@@ -37,5 +37,9 @@ namespace Genius_Pharmacie.Model
             return "ID: " + Id + "\nNom: " + Nom + "\nPrenom: " + Prenom + "\nAdresse: " + Adresse + 
                    "\nTelephone: " + Telephone + "\nEmail: " + Email + "\nType: " + Type + "\nMontant Dette: " + MontantDette;
         }
+        
+        public string Writing(){
+            return Id +":" + Nom + ":" + Prenom + ":" + Adresse + ":" + Telephone + ":" + Email + ":" + Type + ":" + MontantDette;        	
+        }
     }
 }
