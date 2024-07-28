@@ -101,11 +101,16 @@ namespace Genius_Pharmacie.Model
 			this.dateEnregistrement = DateTime.Now;
 		}
 		
-		
+		//Methode permettant d'afficher
 		public override string ToString()
 		{
 			return string.Format("[Produit Code={0}, Categorie={1}, Mesure={2}, Nom={3}, PrixAchat={4}, PrixVente={5}, Quantite={6}, ModeVente={7}, DateEnregistrement={8}]", code, categorie, mesure, nom, prixAchat, prixVente, quantite, modeVente, dateEnregistrement);
 		}
-		
+
+		//Methode permettant d'ecrire dans un fichier
+		public string Writing()
+		{
+			return string.Format("{0}:{1}:{2}:{3}:{4}:{5}:{6}:{7}:{8}", code, categorie, mesure, nom, prixAchat, prixVente, quantite, modeVente, dateEnregistrement.ToString("yyyy-MM-dd"));
+		}
 	}
 }

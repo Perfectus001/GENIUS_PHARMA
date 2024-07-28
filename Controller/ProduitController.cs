@@ -7,6 +7,7 @@
  * To change this template use Tools | Options | Coding | Edit Standard Headers.
  */
 using System;
+using System.IO;
 using Genius_Pharmacie.Model;
 using System.Text.RegularExpressions;
 
@@ -18,6 +19,7 @@ namespace Genius_Pharmacie.Controller
 	/// </summary>
 	public class ProduitController
 	{
+		public string path = "produit.txt";
 		//Constructeur
 		public ProduitController()
 		{
@@ -57,11 +59,14 @@ namespace Genius_Pharmacie.Controller
 				Console.Clear();
 				switch(choix.ToLower()){
 					case "a":
+						Console.Clear();
 						int a = Save();
 						if(a == 1){
-							Console.WriteLine("Succes");
+							Console.ForegroundColor = ConsoleColor.Green;
+							Console.WriteLine("Succes de l'enregistrement");
+							Console.ResetColor();
+							Console.ReadKey(true);
 						}
-						Console.Clear();
 						break;
 					case "b":
 
@@ -238,6 +243,11 @@ namespace Genius_Pharmacie.Controller
 			}
 			
 			Produit prod = new Produit(this.generateCode(produit.Nom, produit.Categorie), produit.Categorie, produit.Mesure, produit.Nom, produit.PrixAchat, produit.PrixVente, produit.Quantite, produit.ModeVente);
+			// Utiliser StreamWriter avec l'argument append = true
+	        using (StreamWriter writer = new StreamWriter(path, true))
+	        {
+	        	writer.WriteLine(prod.Writing());
+	        }
 			Console.WriteLine(prod.ToString());
 			Console.ReadKey(true);
 			

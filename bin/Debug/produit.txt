@@ -1,0 +1,4 @@
+ps-6376:pharmaceutiques:flacon:sirop+:150:175:200:Gros:27/07/2024 23:38:40
+pp-7359:pharmaceutiques:carton:pilule+:75:80:500:Gros et Detail:27/07/2024 23:42:35
+pp-4595:pharmaceutiques:paquet:piqure de miel:300:400:750:Gros:27/07/2024 00:00:00
+cp-5094:cosmetiques:boite:permanente:350:500:3050:Gros et Detail:2024-07-27

@@ -3,3 +3,8 @@ C:\Users\ING Ivenson\Documents\SharpDevelop Projects\GENIUS_PHARMA\bin\Debug\Gen
 C:\Users\ING Ivenson\Documents\SharpDevelop Projects\GENIUS_PHARMA\bin\Debug\Genius_Pharmacie.pdb
 C:\Users\ING Ivenson\Documents\SharpDevelop Projects\GENIUS_PHARMA\obj\Debug\Genius_Pharmacie.exe
 C:\Users\ING Ivenson\Documents\SharpDevelop Projects\GENIUS_PHARMA\obj\Debug\Genius_Pharmacie.pdb
+C:\Users\Perfectus\Documents\SharpDevelop Projects\genius_pharmacie\Genius_Pharmacie\obj\Debug\Genius_Pharmacie.csprojResolveAssemblyReference.cache
+C:\Users\Perfectus\Documents\SharpDevelop Projects\genius_pharmacie\Genius_Pharmacie\obj\Debug\Genius_Pharmacie.exe
+C:\Users\Perfectus\Documents\SharpDevelop Projects\genius_pharmacie\Genius_Pharmacie\obj\Debug\Genius_Pharmacie.pdb
+C:\Users\Perfectus\Documents\SharpDevelop Projects\genius_pharmacie\Genius_Pharmacie\bin\Debug\Genius_Pharmacie.exe
+C:\Users\Perfectus\Documents\SharpDevelop Projects\genius_pharmacie\Genius_Pharmacie\bin\Debug\Genius_Pharmacie.pdb

@@ -1,5 +1,4 @@
-﻿<<<<<<< HEAD
-﻿/*
+﻿﻿/*
  * Created by SharpDevelop.
  * User: Perfectus
  * Date: 26/07/2024
