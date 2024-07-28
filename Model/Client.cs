@@ -24,6 +24,9 @@ namespace Genius_Pharmacie.Model
             Type = type;
             MontantDette = 10; // Montant dette initialisé à zéro lors de l'enregistrement
         }
+        
+        public Client(){}
+        
            public bool AacheteProduit()
         {
             // Supposons qu'il y ait une logique pour déterminer si un client a acheté un produit.

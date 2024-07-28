@@ -81,7 +81,6 @@ namespace Genius_Pharmacie.Controller
 
 			// Générer un ID unique
 			var clientId = clientIdCounter.ToString();
-			clientIdCounter++;
 
 			// Crée un nouvel objet Client et l'ajoute au dictionnaire
 			Client client = new Client(this.generateCode(nom, prenom, telephone), nom, prenom, adresse, telephone, email, type);
@@ -295,6 +294,48 @@ namespace Genius_Pharmacie.Controller
 	        string codeClient = "" + premiereLettreprenom + premiereLettreNom + tel2 + "-" + nombreAleatoire;
 	
 	        return codeClient;
+		}
+		
+		public static Dictionary<string, Client> DataClient(){
+			Dictionary<string, Client> clients = new Dictionary<string, Client>();
+			
+			if (File.Exists("client.txt"))
+			{
+				string[] lignes = File.ReadAllLines("client.txt");
+
+				foreach (string ligne in lignes)
+				{
+					string[] parties = ligne.Split(':');
+
+					if (parties.Length == 8)
+					{
+						Client client = new Client();
+						
+						client.Id = parties[0];
+						client.Nom = parties[1];
+						client.Prenom = parties[2];
+						client.Adresse = parties[3];
+						client.Telephone = parties[4];
+						client.Email = parties[5];
+						client.Type = parties[6];
+						client.MontantDette = decimal.Parse(parties[7]);
+						
+						clients.Add(client.Id, client);
+						
+					}
+				}
+				
+				foreach(var el in clients){
+					Console.WriteLine(el.Key + " : " + el.Value);
+				}
+				Console.ReadKey(true);
+				return clients;
+			}
+			else
+			{
+				Console.WriteLine("Le fichier client.txt n'existe pas.");
+			}
+			return null;
 		}
 		
 	}
