@@ -1,3 +1,4 @@
+﻿<<<<<<< HEAD
 ﻿/*
  * Created by SharpDevelop.
  * User: Perfectus

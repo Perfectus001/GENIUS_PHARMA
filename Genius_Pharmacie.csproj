@@ -45,8 +45,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controller\ClientController.cs" />
     <Compile Include="Controller\ProduitController.cs" />
     <Compile Include="File\ProduitFile.cs" />
+    <Compile Include="Model\Client.cs" />
     <Compile Include="Model\Produit.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
