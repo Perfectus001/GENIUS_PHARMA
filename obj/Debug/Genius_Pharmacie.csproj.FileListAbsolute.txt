@@ -1,0 +1,5 @@
+C:\Users\Perfectus\Documents\SharpDevelop Projects\genius_pharmacie\Genius_Pharmacie\obj\Debug\Genius_Pharmacie.csprojResolveAssemblyReference.cache
+C:\Users\Perfectus\Documents\SharpDevelop Projects\genius_pharmacie\Genius_Pharmacie\bin\Debug\Genius_Pharmacie.exe
+C:\Users\Perfectus\Documents\SharpDevelop Projects\genius_pharmacie\Genius_Pharmacie\bin\Debug\Genius_Pharmacie.pdb
+C:\Users\Perfectus\Documents\SharpDevelop Projects\genius_pharmacie\Genius_Pharmacie\obj\Debug\Genius_Pharmacie.exe
+C:\Users\Perfectus\Documents\SharpDevelop Projects\genius_pharmacie\Genius_Pharmacie\obj\Debug\Genius_Pharmacie.pdb
