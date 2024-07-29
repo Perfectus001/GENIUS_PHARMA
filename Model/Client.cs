@@ -22,7 +22,7 @@ namespace Genius_Pharmacie.Model
             Telephone = telephone;
             Email = email;
             Type = type;
-            MontantDette = 10; // Montant dette initialisé à zéro lors de l'enregistrement
+            MontantDette = 0; // Montant dette initialisé à zéro lors de l'enregistrement
         }
            public bool AacheteProduit()
         {
