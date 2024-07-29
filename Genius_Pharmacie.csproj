@@ -48,9 +48,11 @@
   <ItemGroup>
     <Compile Include="Controller\ClientController.cs" />
     <Compile Include="Controller\ProduitController.cs" />
+    <Compile Include="Controller\SousMesureController.cs" />
     <Compile Include="Controller\VenteController.cs" />
     <Compile Include="Model\Client.cs" />
     <Compile Include="Model\Produit.cs" />
+    <Compile Include="Model\SousMesure.cs" />
     <Compile Include="Model\Vente.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

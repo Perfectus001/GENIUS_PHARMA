@@ -59,7 +59,8 @@ namespace Genius_Pharmacie
 						produitController.MenuProduit();
 						break;
 					case "4":
-						
+						SousMesureController sousMesureController = new SousMesureController();
+						sousMesureController.MenuSousMesure();
 						break;
 					case "5":
 						

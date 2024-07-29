@@ -8,6 +8,8 @@
  */
 using System;
 using System.Collections;
+using System.Linq;
+using System.Collections.Generic;
 
 namespace Genius_Pharmacie.Model
 {
@@ -18,8 +20,9 @@ namespace Genius_Pharmacie.Model
 	{
 		private int id;
 		private string idClient;
-		private ArrayList infoProdVendu = null;
+		private ArrayList infoProdVendu = new ArrayList();
 		private string modePaiement;
+		private DateTime dateVente;
 		private double total;
 		
 		//getter et setters
@@ -47,6 +50,12 @@ namespace Genius_Pharmacie.Model
 			set{modePaiement = value;}
 		}
 		
+		public DateTime DateVente
+		{
+			get{return dateVente;}
+			set{dateVente = value;}
+		}
+		
 		public double Total
 		{
 			get{return total;}
@@ -56,6 +65,26 @@ namespace Genius_Pharmacie.Model
 		
 		public Vente()
 		{
+		}
+		
+		public Vente(int id, string idClient, ArrayList liste, string modepaiement, double total){
+			this.id = id;
+			this.idClient = idClient;
+			this.infoProdVendu = new ArrayList(liste);
+			this.modePaiement = modepaiement;
+			this.dateVente = DateTime.Now;
+			this.total = total;
+		}
+		
+		public override string ToString()
+		{
+			return string.Format("[Vente Id={0}, IdClient={1}, InfoProdVendu={2}, ModePaiement={3}, DateVente={4}, Total={5}]", id, idClient, infoProdVendu.ToString(), modePaiement, dateVente, total);
+		}
+
+		public string Writing()
+		{
+            var infoProdStrings = infoProdVendu.Cast<object[]>().Select(array => string.Join(", ", array.Select(item => item.ToString())));
+            return string.Format("{0}:{1}:{2}:{3}:{4}:{5}", id, idClient, string.Join(" | ", infoProdStrings), modePaiement, dateVente.ToString("yyyy-MM-dd"), total);
 		}
 	}
 }

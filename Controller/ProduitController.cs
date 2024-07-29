@@ -61,13 +61,7 @@ namespace Genius_Pharmacie.Controller
 				switch(choix.ToLower()){
 					case "a":
 						Console.Clear();
-						int a = Save();
-						if(a == 1){
-							Console.ForegroundColor = ConsoleColor.Green;
-							Console.WriteLine("Succes de l'enregistrement");
-							Console.ResetColor();
-							Console.ReadKey(true);
-						}
+						Save();
 						break;
 					case "b":
 						Display();
@@ -249,20 +243,22 @@ namespace Genius_Pharmacie.Controller
 			using (StreamWriter writer = new StreamWriter(path, true))
 			{
 				writer.WriteLine(prod.Writing());
+				Console.ForegroundColor = ConsoleColor.Green;
+				Console.WriteLine("Succes de l'enregistrement");
+				Console.ResetColor();
+				Console.ReadKey(true);
 			}
-			Console.WriteLine(prod.ToString());
-			Console.ReadKey(true);
-			return 1;
+			
 		}
 		
 		private void Display(){
 			Dictionary<string, Produit> produits = DataProduit();
 			if(produits != null){
-		        // Afficher les données du deuxième dictionnaire pour vérifier la copie
-		        foreach (var element in produits)
-		        {
-		            Console.WriteLine("Clé:" + element.Key + "Valeur: " + element.Value.ToString());
-		        }
+				// Afficher les données du deuxième dictionnaire pour vérifier la copie
+				foreach (var element in produits)
+				{
+					Console.WriteLine("Clé:" + element.Key + "Valeur: " + element.Value.ToString());
+				}
 			}
 		}
 		
@@ -295,10 +291,6 @@ namespace Genius_Pharmacie.Controller
 						
 					}
 				}
-				foreach(var el in produits){
-					Console.WriteLine(el.Key + " : " + el.Value);
-				}
-				Console.ReadKey(true);
 				return produits;
 			}
 			else
