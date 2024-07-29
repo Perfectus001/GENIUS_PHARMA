@@ -122,7 +122,7 @@ namespace Genius_Pharmacie.Controller
 					string idProd = "";
 					int k = 0;
 					while(k < 2){
-						Console.WriteLinez("Saisissez le code du produit");
+						Console.WriteLine("Saisissez le code du produit");
 						Console.Write(">> ");
 						idProd = Console.ReadLine();
 						

@@ -24,15 +24,14 @@ namespace Genius_Pharmacie.Model
             Type = type;
             MontantDette = 0; // Montant dette initialisé à zéro lors de l'enregistrement
         }
+           public bool ClientHasNoDebt()
+    {
+        // Vérifie si le montant de la dette est nul ou inférieur ou égal à zéro
+        return MontantDette <= 0;
+    }
         
-        public Client(){}
         
-           public bool AacheteProduit()
-        {
-            // Supposons qu'il y ait une logique pour déterminer si un client a acheté un produit.
-            // Ici, on suppose que le client n'a pas acheté de produit s'il n'a pas de dette.
-            return MontantDette > 10;
-        }
+       
 
 
         public override string ToString()
