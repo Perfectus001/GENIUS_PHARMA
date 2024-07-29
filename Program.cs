@@ -47,8 +47,7 @@ namespace Genius_Pharmacie
 				}
 				switch(choix){
 					case "1":
-						VenteController venteController = new VenteController();
-						venteController.menuVente();
+						 Console.Write("Press any key to continue . . . ");
 						break;
 					case "2":
 						ClientController clientController = new ClientController();

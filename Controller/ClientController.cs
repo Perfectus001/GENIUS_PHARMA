@@ -1,342 +1,545 @@
-﻿using System;
+﻿/*
+ * Created by SharpDevelop.
+ * User: Perfectus
+ * Date: 26/07/2024
+ * Time: 23:11
+ * 
+ * To change this template use Tools | Options | Coding | Edit Standard Headers.
+ */
+using System;
 using System.IO;
 using System.Collections.Generic;
-using System.Text.RegularExpressions;
 using Genius_Pharmacie.Model;
+using System.Text.RegularExpressions;
+
 
 namespace Genius_Pharmacie.Controller
 {
-	public class ClientController
-	{
-		public string path = "client.txt";
-		private Dictionary<string, Client> clients = new Dictionary<string, Client>();
-		private int clientIdCounter = 1;  // Compteur pour générer des IDs uniques
-		
-		//
-		public void MenuClient()
-		{
-			Console.Title = "GESTION CLIENT";
-			bool while1 = true;
-			string choix = null;
-			while(while1){
-				while(true){
-					Console.Clear();
-					Console.WriteLine("========================================================");
-					Console.ForegroundColor = ConsoleColor.Blue;
-					Console.WriteLine(":                      Menu Client                     :");
-					Console.ResetColor();
-					Console.WriteLine("========================================================");
-	                Console.WriteLine("a. Enregistrer un client");
-	                Console.WriteLine("b. Afficher tous les clients");
-	                Console.WriteLine("c. Payer une dette");
-	                Console.WriteLine("d. Supprimer un client");
-	                Console.WriteLine("e. Retour au menu principal");
-					Console.Write("========================================================\n>>");				
-					choix = Console.ReadLine();
-					if(Regex.IsMatch(choix, @"^[a-eA-E]$")){
-						break;
-					}else{
-						Console.Clear();
-						Console.ForegroundColor = ConsoleColor.Red;
-						Console.WriteLine("Veuillez saisir une lettre entre [a-e]");
-						Console.ResetColor();
-						Console.ReadKey(true);
-					}
-				}
-				Console.Clear();
-				switch(choix.ToLower()){
-					case "a":
-						Console.Clear();
-						this.EnregistrerClient();
-						break;
-					case "b":
+	 public class ClientController
+  {
+        public string path = "client.txt";
+       private Dictionary<string, Client> clients = new Dictionary<string, Client>();
+        private int clientIdCounter = 1;  // Compteur pour générer des IDs uniques
 
-						break;
-					case "c":
+      public void MenuClient()
+{
+    Console.Title = "GESTION CLIENT";
+    bool while1 = true;
+    string choix = null;
 
-						break;
-					case "d":
+    while (while1)
+    {
+        while (true)
+        {
+            Console.Clear();
+           Console.WriteLine("========================================================");
+            Console.ForegroundColor = ConsoleColor.Blue;
+            Console.WriteLine(":                      Menu Client                     :");
+            Console.ResetColor();
+            Console.WriteLine("========================================================");
+            Console.WriteLine("a. Enregistrer un client");
+            Console.WriteLine("b. Afficher tous les clients");
+            Console.WriteLine("c. Afficher les clients avec des dettes");
+            Console.WriteLine("d. Payer une dette");
+            Console.WriteLine("e. Supprimer un client n'ayant acheté aucun produit");
+            Console.WriteLine("f. Retour au menu principal");
+            Console.Write("========================================================\n>>");
+            choix = Console.ReadLine();
+            if (Regex.IsMatch(choix, @"^[a-fA-F]$"))
+            {
+                break;
+            }
+            else
+            {
+                Console.Clear();
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("Veuillez saisir une lettre entre [a-f]");
+                Console.ResetColor();
+                Console.ReadKey(true);
+            }
+        }
 
-						break;
-					case "e":
-						while1 = false;
-						break;						
-					default:
-						Console.WriteLine("Mauvais choix!!!");
-						break;
-				}
-			}
-		}
+        Console.Clear();
+        switch (choix.ToLower())
+        {
+            case "a":
+                Console.Clear();
+                this.EnregistrerClient();
+                Console.ReadKey(true);
+                break;
+            case "b":
+                Console.Clear();
+                this.AfficherClients();
+                Console.ReadKey(true);
+                break;
+            case "c":
+                Console.Clear();
+                this.AfficherClientsAvecDettes();
+                Console.ReadKey(true);
+                break;
+            case "d":
+                Console.Write("Entrez le code du client: ");
+                string codeClient = Console.ReadLine();
+                PayerDetteClient(codeClient);
+                Console.ReadKey(true);
+                break;
+            case "e":
+                Console.Write("Entrez l'ID du client à supprimer : ");
+                string clientId = Console.ReadLine();
+                SupprimerClientSansAchat(clientId);
+                Console.ReadKey(true);
+                break;
+            case "f":
+                while1 = false;
+                break;
+            default:
+                Console.WriteLine("Mauvais choix!!!");
+                break;
+        }
+    }
+}
 
-		// Méthode pour enregistrer un client
-		public void EnregistrerClient()
-		{
-			// Demande les informations du client avec validation
-			var nom = DemanderEtValiderNom( "Nom (lettres uniquement) : ");
-			var prenom = DemanderEtValiderNom("Prenom (lettres uniquement) : ");
-			var adresse = DemanderEtValiderTexte("Adresse : ");
-			var telephone = DemanderEtValiderTelephone("Téléphone (8 chiffres) : ");
-			var email = DemanderEtValiderEmail("Email (format xxx@gmail.com) : ");
-			var type = DemanderEtValiderType("Type (1: aucun, 2: à crédit) : ");
+        // Méthode pour enregistrer un client
+        public void EnregistrerClient()
+        {
+            // Demande les informations du client avec validation
+           var nom = DemanderEtValiderNom("Nom (lettres uniquement ou lettres avec tirets) : ");
+           var prenom = DemanderEtValiderNom("Prénom (lettres uniquement ou lettres avec tirets) : ");
 
-			// Générer un ID unique
-			var clientId = clientIdCounter.ToString();
+            var adresse = DemanderEtValiderTexte("Adresse : ");
+            var telephone = DemanderEtValiderTelephone("Téléphone (8 chiffres) : ");
+            var email = DemanderEtValiderEmail("Email (format xxx@gmail.com) : ");
+            var type = DemanderEtValiderType("Type (1: aucun, 2: à crédit) : ");
 
-			// Crée un nouvel objet Client et l'ajoute au dictionnaire
-			Client client = new Client(this.generateCode(nom, prenom, telephone), nom, prenom, adresse, telephone, email, type);
-			
-			// Utiliser StreamWriter avec l'argument append = true
-	        using (StreamWriter writer = new StreamWriter(path, true))
-	        {
-	        	writer.WriteLine(client.Writing());
-	        }
-			Console.WriteLine("Client enregistré avec succès");
-		}
+            // Générer un ID unique
+            var clientId = clientIdCounter.ToString();
+            clientIdCounter++;
 
-		// Méthode pour afficher tous les clients
-		public void AfficherClients()
-		{
-			if (clients.Count == 0)
-			{
-				Console.WriteLine("Aucun client à afficher.");
-			}
-			else
-			{
-				foreach (var client in clients.Values)
-				{
-					Console.WriteLine(client);
-					Console.WriteLine(new string('-', 50)); // Ligne de séparation
-				}
-			}
-		}
+            // Crée un nouvel objet Client et l'ajoute au dictionnaire
+            Client client = new Client(this.generateCode(nom, prenom, telephone), nom, prenom, adresse, telephone, email, type);
+
+            // Utiliser StreamWriter avec l'argument append = true
+            using (StreamWriter writer = new StreamWriter(path, true))
+            {
+                writer.WriteLine(client.Writing());
+            }
+            Console.WriteLine("Client enregistré avec succès");
+        }
+// Méthode pour afficher tous les clients
+public void AfficherClients()
+{
+    
+    try
+    {
+        // Affiche le chemin complet du fichier
+        string fullPath = "client.txt";
+        
+
+        // Utilise FileInfo pour vérifier si le fichier existe avant de l'ouvrir
+        FileInfo fileInfo = new FileInfo(fullPath);
+        if (!fileInfo.Exists)
+        {
+            Console.WriteLine("Aucun fichier 'client.txt' trouvé.");
+            return;
+        }
+
+        // Ouvre le fichier en lecture
+        using (StreamReader sr = new StreamReader(fullPath))
+        {
+            string line;
+            bool hasClients = false; // Variable pour vérifier s'il y a des clients
+
+            while ((line = sr.ReadLine()) != null)
+            {
+                // Sépare chaque ligne en attributs en utilisant le deux-points comme séparateur
+                var attributs = line.Split(':');
+
+                if (attributs.Length == 8)
+                {
+                    Console.WriteLine("ID: " + attributs[0]);
+                    Console.WriteLine("Nom: " + attributs[1]);
+                    Console.WriteLine("Prenom: " + attributs[2]);
+                    Console.WriteLine("Adresse: " + attributs[3]);
+                    Console.WriteLine("Téléphone: " + attributs[4]);
+                    Console.WriteLine("Email: " + attributs[5]);
+                    Console.WriteLine("Type: " + attributs[6]);
+                    Console.WriteLine("Montant Dette: " + attributs[7]);
+
+                    Console.WriteLine(new string('-', 50)); // Ligne de séparation après avoir affiché tous les attributs d'un client
+                    hasClients = true; // Indique qu'il y a au moins un client
+                }
+                else
+                {
+                    Console.WriteLine("Données du client incorrectes: " + line);
+                }
+            }
+
+            if (!hasClients)
+            {
+                Console.WriteLine("Aucun client enregistré.");
+            }
+        }
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine("Erreur lors de la lecture du fichier : " + ex.Message);
+    }
+}
+
+// Méthode pour afficher les clients ayant des dettes
+public void AfficherClientsAvecDettes()
+{
+    string fullPath = "client.txt";
+    FileInfo fileInfo = new FileInfo(fullPath);
+
+    if (!fileInfo.Exists)
+    {
+        Console.WriteLine("Le fichier 'client.txt' n'existe pas.");
+        return;
+    }
+
+    try
+    {
+        using (StreamReader sr = new StreamReader(fullPath))
+        {
+            string ligne;
+            bool hasClientsWithDettes = false;
+
+            while ((ligne = sr.ReadLine()) != null)
+           {
+                string[] attributs = ligne.Split(':');
+
+                // Assurez-vous que la ligne a bien 8 parties et que la dette n'est pas vide
+                if (attributs.Length == 8 && !string.IsNullOrWhiteSpace(attributs[7]))
+                {
+                    decimal montantDette = 0;
+                    bool parseSuccess = false;
+
+                    // Convertit le montant de la dette de string à decimal
+                    try
+                    {
+                        montantDette = Convert.ToDecimal(attributs[7]);
+                        parseSuccess = true;
+                    }
+                    catch (FormatException)
+                    {
+                        parseSuccess = false;
+                    }
+
+                    // Si la conversion réussit et le montant de la dette est supérieur à zéro
+                    if (parseSuccess && montantDette > 0)
+                    {
+                        Console.WriteLine("ID: " + attributs[0]);
+                        Console.WriteLine("Nom: " + attributs[1]);
+                        Console.WriteLine("Prenom: " + attributs[2]);
+                        Console.WriteLine("Adresse: " + attributs[3]);
+                        Console.WriteLine("Telephone: " + attributs[4]);
+                        Console.WriteLine("Email: " + attributs[5]);
+                        Console.WriteLine("Type: " + attributs[6]);
+                        Console.WriteLine("Montant Dette: " + montantDette);
+                        Console.WriteLine(new string('-', 50)); // Ligne de séparation
+                        hasClientsWithDettes = true;
+                    }
+                }
+            }
+
+            if (!hasClientsWithDettes)
+            {
+                Console.WriteLine("Aucun client avec dettes enregistré.");
+            }
+        }
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine("Erreur lors de la lecture du fichier : " + ex.Message);
+    }
+}
+   // Méthode pour payer une dette
 
 
-		// Méthode pour afficher les clients ayant des dettes
-		public void AfficherClientsAvecDettes()
-		{
-			foreach (var client in clients.Values)
-			{
-				if (client.MontantDette > 0)
-				{
-					Console.WriteLine(client);
-					Console.WriteLine(new string('-', 50)); // Ligne de séparation
-				}
-			}
-		}
-		// Méthode pour payer une dette
-		public void PayerDette(string clientId, decimal montant)
-		{
-			// Vérifie si le client avec l'ID fourni existe dans le dictionnaire
-			if (clients.ContainsKey(clientId))
-			{
-				// Récupère le client correspondant à l'ID
-				var client = clients[clientId];
+public void PayerDetteClient(string codeClient)
+{
+    string fullPath = "client.txt";
 
-				// Vérifie que le montant est valide et ne dépasse pas la dette du client
-				if (montant > 0 && client.MontantDette >= montant)
-				{
-					// Réduit le montant de la dette du client
-					client.MontantDette -= montant;
+    FileInfo fileInfo = new FileInfo(fullPath);
+    if (!fileInfo.Exists)
+    {
+        Console.WriteLine("Aucun fichier 'client.txt' trouvé.");
+        return;
+    }
 
-					// Affiche un message confirmant le paiement
-					Console.WriteLine("Le montant de " + montant.ToString("C") + " a été payé. Dette restante: " + client.MontantDette.ToString("C"));
-				}
-				else
-				{
-					// Affiche un message d'erreur si le montant est invalide ou supérieur à la dette
-					Console.WriteLine("Montant invalide ou montant supérieur à la dette.");
-				}
-			}
-			else
-			{
-				// Affiche un message d'erreur si le client n'est pas trouvé
-				Console.WriteLine("Client non trouvé.");
-			}
-		}
+    string tempFile = Path.GetTempFileName();
+    bool clientTrouve = false;
+    bool dettePaye = false;
+
+    try
+    {
+        using (StreamReader sr = fileInfo.OpenText())
+        using (StreamWriter sw = new StreamWriter(tempFile))
+        {
+            string line;
+
+            while ((line = sr.ReadLine()) != null)
+            {
+                var attributs = line.Split(':');
+                if (attributs.Length == 8 && attributs[0] == codeClient)
+                {
+                    clientTrouve = true;
+                    if (attributs[7] != "0")
+                    {
+                        // Reset the debt amount to 0
+                        attributs[7] = "0";
+                        line = string.Join(":", attributs);
+                        dettePaye = true;
+                    }
+                    else
+                    {
+                        Console.WriteLine("Le client avec le code " + codeClient + " n'a pas de dette.");
+                    }
+                }
+                sw.WriteLine(line);
+            }
+        }
+
+        if (clientTrouve)
+        {
+            if (dettePaye)
+            {
+                Console.WriteLine("La dette du client avec le code " + codeClient + " a été payée.");
+            }
+        }
+        else
+        {
+            Console.WriteLine("Aucun client trouvé avec le code " + codeClient + ".");
+        }
+
+        // Replace the original file with the temporary file
+        FileInfo tempFileInfo = new FileInfo(tempFile);
+        tempFileInfo.Replace(fullPath, null, true);
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine("Erreur lors de la mise à jour de la dette du client : " + ex.Message);
+    }
+}
+
+public static void SupprimerClientSansAchat(string clientId)
+{
+    string clientFilePath = "client.txt";
+    string venteFilePath = "vente.txt";
+    string tempFilePath = Path.GetTempFileName();
+
+    FileInfo clientFileInfo = new FileInfo(clientFilePath);
+    FileInfo venteFileInfo = new FileInfo(venteFilePath);
+    FileInfo tempFileInfo = new FileInfo(tempFilePath);
+
+    if (!clientFileInfo.Exists)
+    {
+        Console.WriteLine("Aucun fichier 'client.txt' trouvé.");
+        return;
+    }
+
+    if (!venteFileInfo.Exists)
+    {
+        Console.WriteLine("Le fichier 'vente.txt' n'existe pas. Aucune vérification des achats n'a été effectuée.");
+        // Nous pouvons décider ici de ne pas supprimer le client ou d'informer l'utilisateur.
+        return;
+    }
+
+    try
+    {
+        bool clientSupprime = false;
+
+        // Lire le fichier vente.txt pour vérifier si le client a acheté un produit
+        bool hasPurchased = false;
+        using (StreamReader sr = venteFileInfo.OpenText())
+        {
+            string line;
+            while ((line = sr.ReadLine()) != null)
+            {
+                var attributs = line.Split(':');
+                if (attributs.Length > 1 && attributs[1] == clientId)
+                {
+                   hasPurchased = true;
+                    break;
+                }
+            }
+        }
+
+        if (!hasPurchased)
+        {
+            // Si le client n'a fait aucun achat, supprimer du fichier client.txt
+            using (StreamReader sr = clientFileInfo.OpenText())
+            using (StreamWriter sw = tempFileInfo.CreateText())
+            {
+                string line;
+                while ((line = sr.ReadLine()) != null)
+                {
+                    var attributs = line.Split(':');
+                    if (attributs.Length == 8 && attributs[0] == clientId)
+                    {
+                        clientSupprime = true;
+                        continue; // Ne pas écrire cette ligne dans le fichier temporaire
+                    }
+                    sw.WriteLine(line);
+                }
+            }
+
+            if (clientSupprime)
+            {
+                // Remplacer l'ancien fichier client.txt par le fichier temporaire mis à jour
+                tempFileInfo.Replace(clientFilePath, null);
+                Console.WriteLine("Le client avec l'ID " + clientId + " a été supprimé.");
+            }
+            else
+            {
+                // Si le client n'a pas été trouvé, supprimer le fichier temporaire
+                tempFileInfo.Delete();
+                Console.WriteLine("Aucun client avec l'ID " + clientId + " trouvé.");
+            }
+        }
+        else
+        {
+            // Si le client a effectué des achats, supprimer le fichier temporaire
+            tempFileInfo.Delete();
+            Console.WriteLine("Le client avec l'ID " + clientId + " a acheté des produits et ne peut pas être supprimé.");
+        }
+    }
+    catch (Exception ex)
+    {
+        // Gestion des erreurs
+        Console.WriteLine("Erreur lors de la suppression du client : " + ex.Message);
+        if (tempFileInfo.Exists)
+        {
+            tempFileInfo.Delete();
+        }
+    }
+}
 
 
-		// Méthode pour supprimer un client
-		public void SupprimerClient(string clientId)
-		{
-			// Vérifie si le client existe dans le dictionnaire
-			if (clients.ContainsKey(clientId))
-			{
-				Client client = clients[clientId];
 
-				// Vérifie si le client n'a acheté aucun produit et n'a aucune dette
-				if (!client.AacheteProduit() && client.MontantDette == 0)
-				{
-					clients.Remove(clientId); // Supprime le client du dictionnaire
-					Console.WriteLine("Client supprimé avec succès.");
-				}
-				else
-				{
-					Console.WriteLine("Client ne peut pas être supprimé car il a acheté des produits ou a une dette.");
-				}
-			}
-			else
-			{
-				Console.WriteLine("Client non trouvé.");
-			}
-		}
+        // Méthode pour demander et valider le nom
+      private string DemanderEtValiderNom(string message)
+{
+    string input;
+    while (true)
+    {
+        Console.Write(message);
+        input = Console.ReadLine();
+        if (ValidateName(input))
+        {
+            // Capitaliser la première lettre avant de retourner
+            input = CapitalizeFirstLetter(input);
+            break;
+        }
+        Console.WriteLine("Le format est incorrect. Veuillez entrer des lettres seulement ou des lettres avec tirets.");
+    }
+    return input;
+}
+private string CapitalizeFirstLetter(string input)
+{
+    if (string.IsNullOrEmpty(input))
+        return input;
 
-		
+    // Divise les mots par les tirets, capitalise la première lettre de chaque mot
+    var words = input.Split('-');
+    for (int i = 0; i < words.Length; i++)
+    {
+        if (!string.IsNullOrEmpty(words[i]))
+        {
+            words[i] = char.ToUpper(words[i][0]) + words[i].Substring(1).ToLower();
+        }
+    }
+    return string.Join("-", words);
+}
 
-		// Méthode pour demander et valider le nom
-		private string DemanderEtValiderNom(string message)
-		{
-			string input;
-			while (true)
-			{
-				Console.Write(message);
-				input = Console.ReadLine();
-				if (ValidateName(input))
-					break;
-				Console.WriteLine("Le format est incorrect. Veuillez entrer des lettres uniquement.");
-			}
-			return input;
-		}
 
-		// Méthode pour demander et valider un texte (adresse)
-		private string DemanderEtValiderTexte(string message)
-		{
-			Console.Write(message);
-			return Console.ReadLine();
-		}
+        // Méthode pour demander et valider un texte (adresse)
+        private string DemanderEtValiderTexte(string message)
+        {
+            Console.Write(message);
+            return Console.ReadLine();
+        }
+        // Méthode pour demander et valider le téléphone
+        private string DemanderEtValiderTelephone(string message)
+        {
+            string input;
+            while (true)
+            {
+                Console.Write(message);
+                input = Console.ReadLine();
+                if (ValidateTelephone(input))
+                    break;
+                Console.WriteLine("Le format est incorrect. Veuillez entrer 8 chiffres.");
+            }
+            return input;
+        }
 
-		// Méthode pour demander et valider le téléphone
-		private string DemanderEtValiderTelephone(string message)
-		{
-			string input;
-			while (true)
-			{
-				Console.Write(message);
-				input = Console.ReadLine();
-				if (ValidateTelephone(input))
-					break;
-				Console.WriteLine("Le format est incorrect. Veuillez entrer 8 chiffres.");
-			}
-			return input;
-		}
+        // Méthode pour demander et valider l'email
+        private string DemanderEtValiderEmail(string message)
+        {
+            string input;
+            while (true)
+            {
+                Console.Write(message);
+                input = Console.ReadLine();
+                if (ValidateEmail(input))
+                    break;
+                Console.WriteLine("Le format est incorrect. Veuillez entrer un email au format xxx@gmail.com.");
+            }
+            return input;
+        }
 
-		// Méthode pour demander et valider l'email
-		private string DemanderEtValiderEmail(string message)
-		{
-			string input;
-			while (true)
-			{
-				Console.Write(message);
-				input = Console.ReadLine();
-				if (ValidateEmail(input))
-					break;
-				Console.WriteLine("Le format est incorrect. Veuillez entrer un email au format xxx@gmail.com.");
-			}
-			return input;
-		}
+        // Méthode pour demander et valider le type
+        private string DemanderEtValiderType(string message)
+        {
+            string input;
+            while (true)
+            {
+                Console.Write(message);
+                input = Console.ReadLine();
+                if (ValidateType(input))
+                    break;
+                Console.WriteLine("Le format est incorrect. Veuillez entrer '1' pour aucun ou '2' pour à crédit.");
+            }
+            // Retourne 'aucun' pour 1 et 'à crédit' pour 2
+            return input == "1" ? "aucun" : "à crédit";
+        }
+        // Méthode de validation du nom
+     private bool ValidateName(string name)
+{
+    // Vérifie que le nom contient uniquement des lettres et des tirets
+    return Regex.IsMatch(name, @"^[a-zA-Z-]+$");
+}
 
-		// Méthode pour demander et valider le type
-		private string DemanderEtValiderType(string message)
-		{
-			string input;
-			while (true)
-			{
-				Console.Write(message);
-				input = Console.ReadLine();
-				if (ValidateType(input))
-					break;
-				Console.WriteLine("Le format est incorrect. Veuillez entrer '1' pour aucun ou '2' pour à crédit.");
-			}
-			// Retourne 'aucun' pour 1 et 'à crédit' pour 2
-			return input == "1" ? "aucun" : "à crédit";
-		}
 
-		// Méthode de validation du nom
-		private bool ValidateName(string name)
-		{
-			// Vérifie que le nom contient uniquement des lettres
-			return Regex.IsMatch(name, @"^[a-zA-Z]+$");
-		}
+        // Méthode de validation du téléphone
+        private bool ValidateTelephone(string telephone)
+        {
+            // Vérifie que le téléphone contient exactement 8 chiffres
+            return Regex.IsMatch(telephone, @"^\d{8}$");
+        }
 
-		// Méthode de validation du numéro de téléphone
-		private bool ValidateTelephone(string telephone)
-		{
-			// Vérifie que le téléphone contient exactement 8 chiffres
-			return Regex.IsMatch(telephone, @"^\d{8}$");
-		}
+        // Méthode de validation de l'email
+        private bool ValidateEmail(string email)
+        {
+            // Vérifie que l'email suit le format de base d'un email
+            return Regex.IsMatch(email, @"^[^@\s]+@[^@\s]+\.[^@\s]+$");
+        }
 
-		// Méthode de validation de l'email
-		private bool ValidateEmail(string email)
-		{
-			// Vérifie que l'email a le format xxx@gmail.com
-			return Regex.IsMatch(email, @"^[^@\s]+@gmail\.com$");
-		}
+        // Méthode de validation du type
+        private bool ValidateType(string type)
+        {
+            // Vérifie que le type est '1' ou '2'
+            return type == "1" || type == "2";
+        }
 
-		// Méthode de validation du type
-		private bool ValidateType(string type)
-		{
-			// Vérifie que le type est soit '1' soit '2'
-			return type == "1" || type == "2";
-		}
-		
-		//Fonction permettant de generer le code du client 
-		private string generateCode(string nom, string prenom, string telephone){
-        	
-			// Obtenir la première lettre du prenom, du nom et num de tel
-	        char premiereLettreprenom = prenom[0];
-	        char premiereLettreNom = nom[0];
-	        string tel2 = telephone.Substring(0,2);
-	
-	        // Générer un nombre aléatoire de 4 chiffres
-	        Random random = new Random();
-	        int nombreAleatoire = random.Next(1000, 10000); // entre 1000 et 9999
-	
-	        // Construire le code du client
-	        string codeClient = "" + premiereLettreprenom + premiereLettreNom + tel2 + "-" + nombreAleatoire;
-	
-	        return codeClient;
-		}
-		
-		public static Dictionary<string, Client> DataClient(){
-			Dictionary<string, Client> clients = new Dictionary<string, Client>();
-			
-			if (File.Exists("client.txt"))
-			{
-				string[] lignes = File.ReadAllLines("client.txt");
-
-				foreach (string ligne in lignes)
-				{
-					string[] parties = ligne.Split(':');
-
-					if (parties.Length == 8)
-					{
-						Client client = new Client();
-						
-						client.Id = parties[0];
-						client.Nom = parties[1];
-						client.Prenom = parties[2];
-						client.Adresse = parties[3];
-						client.Telephone = parties[4];
-						client.Email = parties[5];
-						client.Type = parties[6];
-						client.MontantDette = decimal.Parse(parties[7]);
-						
-						clients.Add(client.Id, client);
-						
-					}
-				}
-				
-				foreach(var el in clients){
-					Console.WriteLine(el.Key + " : " + el.Value);
-				}
-				Console.ReadKey(true);
-				return clients;
-			}
-			else
-			{
-				Console.WriteLine("Le fichier client.txt n'existe pas.");
-			}
-			return null;
-		}
-		
-	}
+        // Méthode pour générer un code unique pour un client
+        private string generateCode(string nom, string prenom, string telephone)
+        {
+            // Crée un code basé sur les premières lettres du nom, du prénom et du téléphone
+            return nom.Substring(0, 1) + prenom.Substring(0, 1) + telephone.Substring(telephone.Length - 4);
+        }
+   }
+ 
 }
